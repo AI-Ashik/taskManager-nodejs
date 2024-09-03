@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("path");
 const fs = require("fs");
 
-const PORT = 3000;
+const PORT = 3001;
 const app = express();
 
 app.use(express.json());
@@ -21,10 +21,25 @@ app.get("/files/:filename", (req, res) => {
     res.render("show", { filename: req.params.filename, filedata });
   });
 });
+
+app.get("/edit/:filename", (req, res) => {
+  res.render("edit", { filename: req.params.filename });
+});
+
 app.post("/create", (req, res) => {
   fs.writeFile(
     `./files/${req.body.title.split(" ").join("")}.txt`,
     req.body.details,
+    (err) => {
+      res.redirect("/");
+    }
+  );
+});
+
+app.post("/edit", (req, res) => {
+  fs.rename(
+    `./files/${req.body.previous}`,
+    `./files/${req.body.new}.txt`,
     (err) => {
       res.redirect("/");
     }
