@@ -36,6 +36,12 @@ app.post("/create", (req, res) => {
   );
 });
 
+app.get("/delete/:filename", (req, res) => {
+  fs.unlink(`./files/${req.params.filename}`, (err) => {
+    res.redirect("/");
+  });
+});
+
 app.post("/edit", (req, res) => {
   fs.rename(
     `./files/${req.body.previous}`,
